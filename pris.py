@@ -1,4 +1,5 @@
 import pris.gui as pg
 
-gui = pg.GUI("prishelper")
-gui.start()
+if __name__ == "__main__":
+    gui = pg.GUI("Pris screenshot helper")
+    gui.start()
