@@ -8,7 +8,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as tf
 
-import os, mouse, keyboard, traceback
+import os, mouse, keyboard, traceback, webbrowser
 import threading, mss.tools, docx, docx.shared
 
 SLST_CHILL = 0
@@ -32,6 +32,7 @@ class GUI:
         self.root = tk.Tk(title)
         self.root.geometry("500x300")
         self.root.title(title)
+        self.root.iconbitmap(os.path.join("res", "minico.ico"))
         self.root.resizable(width=0, height=0)
 
         #Загрузка картинки
@@ -174,6 +175,15 @@ class GUI:
             self.key_name.set(keyboard.read_key())
         self.key_button = ttk.Button(work_frame, text="Переназначить", command=redefine_button)
         self.key_button.grid(row=5, column=1, padx=5, sticky="nsew")
+        #============================================
+
+        #Ссылка на репозиторий
+        self.repo_link = ttk.Label(work_frame, text=
+            'https://github.com/alex-\nrusakevich/pris')
+        self.repo_link.grid(row=6, column=1, padx=5, pady=5, sticky="nsew")
+        def open_repo(_):
+            webbrowser.open("https://github.com/alex-rusakevich/pris", new=2)
+        self.repo_link.bind("<Button-1>", open_repo)
 
         #Запуск процесса
         self.start_button = ttk.Button(text="Старт!", command=self.start_working)
@@ -214,6 +224,7 @@ class GUI:
                     self.back_to_chill()
                     return
                 else:
+                    self.file_out_path.set(self.file_out_path.get() + ".docx")
                     file_path += ".docx"
             if not os.path.exists(file_path):
                 question = tm.askyesno("Предупреждение", "Файла не существует. Вы хотите создать его?")
@@ -230,6 +241,7 @@ class GUI:
                     screen_path = "__TEMP__.png"
                     screen_path = os.path.abspath(screen_path)
                     img = ""
+                    #Делаем скриншот
                     if self.chosen_opt.get() == CHSE_OWN:
                         ch1x = int(self.btn_choose1_X.get())
                         ch1y = int(self.btn_choose1_Y.get())
@@ -244,6 +256,7 @@ class GUI:
                         with mss.mss() as print_screen:
                             img = print_screen.shot(output=screen_path)
                     
+                    #Работа с docx и doc файлами
                     section = self.document.sections[0]
                     section.left_margin = docx.shared.Cm(1)
                     section.right_margin = docx.shared.Cm(1)

@@ -1,5 +1,8 @@
+certifi==2020.12.5
+chardet==4.0.0
 cx-Freeze==6.5.3
 docx==0.2.4
+idna==2.10
 importlib-metadata==3.7.2
 keyboard==0.13.5
 lxml==4.6.2
@@ -8,4 +11,5 @@ mss==6.1.0
 Pillow==8.1.2
 PyDocX==0.9.10
 python-docx==0.8.10
+urllib3==1.26.3
 zipp==3.4.1
