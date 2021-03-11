@@ -28,15 +28,16 @@ class GUI:
 
     err_queue = Queue()
 
-    def __init__(self, title):
+    def __init__(self, title, cur_dir):
         self.root = tk.Tk(title)
+        self.cur_dir = cur_dir
         self.root.geometry("500x300")
         self.root.title(title)
-        self.root.iconbitmap("icon.ico")
+        self.root.iconbitmap(os.path.join(cur_dir, "res", "icon.ico"))
         self.root.resizable(width=0, height=0)
 
         #Загрузка картинки
-        bg_img = Image.open(os.path.join("res", 
+        bg_img = Image.open(os.path.join(cur_dir, "res", 
             "bg_border.png"))
         bg_img = ImageTk.PhotoImage(bg_img)
 
@@ -101,7 +102,7 @@ class GUI:
             self.btn_choose2_X.config(state="disabled")
             self.btn_choose2_Y.config(state="disabled")
         on_fs()
-        full_screen_rbutton = ttk.Radiobutton(text="Весь экран",value=CHSE_FS,
+        self.full_screen_button = ttk.Radiobutton(text="Весь экран",value=CHSE_FS,
             variable=self.chosen_opt, command=on_fs)
 
         def on_own():
@@ -112,10 +113,10 @@ class GUI:
             self.btn_choose2.config(state="enabled")
             self.btn_choose2_X.config(state="enabled")
             self.btn_choose2_Y.config(state="enabled")            
-        own_rbutton = ttk.Radiobutton(text="Свой выбор",value=CHSE_OWN,
+        self.own_rbutton = ttk.Radiobutton(text="Свой выбор",value=CHSE_OWN,
             variable=self.chosen_opt, command=on_own)
-        full_screen_rbutton.place(x=110,y=85)
-        own_rbutton.place(x=110, y=105)
+        self.full_screen_button.place(x=110,y=85)
+        self.own_rbutton.place(x=110, y=105)
         self.chosen_opt.set(1)
         #============================================
 
@@ -208,6 +209,7 @@ class GUI:
         self.work_state = WORK_CHILLING
         keyboard.unhook_all()
         self.start_button.config(text="Старт!")
+        self.change_state("enabled")
 
     def process(self, err_queue):
         try:
@@ -238,7 +240,7 @@ class GUI:
 
             def really_processing():
                 try:
-                    screen_path = "__TEMP__.png"
+                    screen_path = os.path.join(self.cur_dir, "__TEMP__.png")
                     screen_path = os.path.abspath(screen_path)
                     img = ""
                     #Делаем скриншот
@@ -276,16 +278,40 @@ class GUI:
             err_queue.put((err.__class__, traceback.format_exc()))
             self.root.event_generate("<<On error>>")
 
+    #Функция для включения и выключения 
+    #всех элементов интерфейса, кроме кнопки "Старт"
+    def change_state(self, st):
+        self.btn_choose1.config(state=st)
+        self.btn_choose1_X.config(state=st)
+        self.btn_choose1_Y.config(state=st)
+
+        self.btn_choose2.config(state=st)
+        self.btn_choose2_X.config(state=st)
+        self.btn_choose2_Y.config(state=st)
+
+        self.own_rbutton.config(state=st)
+        self.full_screen_button.config(state=st)
+
+        self.key_name_entry.config(state=st)
+        self.key_button.config(state=st)
+
+        self.file_out_path_entry.config(state=st)
+        self.save_button.config(state=st)
+
     def start_working(self):
         if self.work_state == WORK_CHILLING:
             self.work_state = WORK_WORKING
             self.start_button.config(text="Стоп")
+
+            # Отключаем всё
+            self.change_state("disabled")
 
             #Создание потока
             self.processing_thread = threading.Thread(target=self.process, args=(self.err_queue,))
             self.processing_thread.start()
         elif self.work_state == WORK_WORKING:
             self.work_state = WORK_CHILLING
+            self.change_state("enabled")
             self.start_button.config(text="Старт!")
 
     def save_file(self):

@@ -1,7 +1,7 @@
 from cx_Freeze import setup, Executable
 import pris
 
-includefiles = ["LICENSE", "README.md", "res/", "icon.ico"]
+includefiles = ["LICENSE", "README.md", "res/"]
 includes = ["pris.gui"]
 excludes = []
 packages = []
@@ -28,5 +28,6 @@ setup(
             "initial_target_dir": r"[ProgramFilesFolder]\%s\%s" % (company_name, product_name)
         }
     },
-    executables = [Executable("pris.pyw", icon="icon.ico", base = "Win32GUI")]
+    executables = [Executable("pris.pyw", icon="res/icon.ico", base = "Win32GUI", shortcutName="pris",
+            shortcutDir="DesktopFolder")]
 )
