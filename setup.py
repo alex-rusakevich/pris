@@ -1,13 +1,13 @@
 from cx_Freeze import setup, Executable
 import pris
 
-includefiles = ["LICENSE", "README.md", "res/"]
+includefiles = ["LICENSE", "README.md", "res/", "icon.ico"]
 includes = ["pris.gui"]
 excludes = []
 packages = []
 
 company_name = "Alerus"
-product_name - "pris"
+product_name = "pris"
 
 setup(
     name = "pris",

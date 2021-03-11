@@ -32,7 +32,7 @@ class GUI:
         self.root = tk.Tk(title)
         self.root.geometry("500x300")
         self.root.title(title)
-        self.root.iconbitmap(os.path.join("res", "minico.ico"))
+        self.root.iconbitmap("icon.ico")
         self.root.resizable(width=0, height=0)
 
         #Загрузка картинки
