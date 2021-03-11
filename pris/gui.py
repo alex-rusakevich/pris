@@ -210,6 +210,14 @@ class GUI:
         keyboard.unhook_all()
         self.start_button.config(text="Старт!")
         self.change_state("enabled")
+        if self.chosen_opt.get()==CHSE_FS:
+            self.btn_choose1.config(state="disabled")
+            self.btn_choose1_X.config(state="disabled")
+            self.btn_choose1_Y.config(state="disabled")
+
+            self.btn_choose2.config(state="disabled")
+            self.btn_choose2_X.config(state="disabled")
+            self.btn_choose2_Y.config(state="disabled")
 
     def process(self, err_queue):
         try:
@@ -312,6 +320,14 @@ class GUI:
         elif self.work_state == WORK_WORKING:
             self.work_state = WORK_CHILLING
             self.change_state("enabled")
+            if self.chosen_opt.get()==CHSE_FS:
+                self.btn_choose1.config(state="disabled")
+                self.btn_choose1_X.config(state="disabled")
+                self.btn_choose1_Y.config(state="disabled")
+
+                self.btn_choose2.config(state="disabled")
+                self.btn_choose2_X.config(state="disabled")
+                self.btn_choose2_Y.config(state="disabled")
             self.start_button.config(text="Старт!")
 
     def save_file(self):
